@@ -200,20 +200,6 @@ class TokenService:
         self._check_audience(claims)
 
         self.claims = claims 
-        
-    def verify(self, token, current_time=None):
-        """ https://github.com/awslabs/aws-support-tools/blob/master/Cognito/decode-verify-jwt/decode-verify-jwt.py """
-        if not token:
-            raise TokenVerifyError("No token provided")
-
-        headers = self._extract_headers(token)
-        pkey_data = self._find_pkey(headers)
-        self._verify_signature(token, pkey_data)
-
-        claims = self._extract_claims(token)
-        self._check_expiration(claims, current_time)
-        self._check_audience(claims)
-
-        self.claims = claims
+    
         return claims
          
