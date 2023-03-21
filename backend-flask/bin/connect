@@ -1,3 +1,8 @@
 #! /usr/bin/bash
- 
-psql $CONNECTION_URL
+ if [ "$1" = "prod" ]; then
+  echo "Running in production mode"
+  URL=$PRO_URL
+else
+  URL=$CONNECTION_URL
+fi
+psql $URL
