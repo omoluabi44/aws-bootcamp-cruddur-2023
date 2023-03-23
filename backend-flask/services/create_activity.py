@@ -1,11 +1,13 @@
 import uuid
 from datetime import datetime, timedelta, timezone
+from lib.db import pool, print_sql_err
 class CreateActivity:
   def run(message, user_handle, ttl):
     model = {
       'errors': None,
       'data': None
     }
+   
 
     now = datetime.now(timezone.utc).astimezone()
 
@@ -40,6 +42,7 @@ class CreateActivity:
         'message': message
       }   
     else:
+      self.create_activity()
       model['data'] = {
         'uuid': uuid.uuid4(),
         'display_name': 'Andrew Brown',
@@ -49,3 +52,25 @@ class CreateActivity:
         'expires_at': (now + ttl_offset).isoformat()
       }
     return model
+  def create_activity(user, message, expires_at):
+     
+    sql = f"""
+    INSERT INTO(
+      user_uuid,
+      message,
+      expires_at
+    )
+    VALUE(
+      "{user_uuid}",
+      "{message}",
+      "{expires_at}"
+
+    )
+    """
+    try:
+       conn = pool.connection()
+       cur = conn.cursor
+       cur.execute(sql)
+       con.commit()
+    except OperationalError as err:
+      print_sql_err(err)
