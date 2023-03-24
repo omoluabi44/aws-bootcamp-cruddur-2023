@@ -1,9 +1,6 @@
 from psycopg_pool import ConnectionPool
 import os
 
-
-
-
 class db:
   def _init_(self):
     self.init_pool()
@@ -39,13 +36,15 @@ def print_sql_err(err):
     print ("pgcode:", err.pgcode, "\n")
 
 def query_object():
+  print("SQL Statement ---")
+  print(sql)
   with pool.connection() as conn:
          with conn.cursor() as cur:
           cur.execute(sql)
           # this will return a tuple
           # the first field being the data
           json = cur.fetchone()
-        return json[0]
+       
 
 def query_array():
 
